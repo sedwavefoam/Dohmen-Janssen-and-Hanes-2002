@@ -1,0 +1,103 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.7.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default         backward;
+    ddt(beta)	    Euler implicit; //somehow this scheme is only available in OpenFoam 2.3.x
+}
+
+gradSchemes
+{
+    default         Gauss linear;
+}
+
+divSchemes
+{
+    default         Gauss upwind; // openfoam 2.4.x somehow couldn't read this
+    div(phirb,alpha1) Gauss upwind;
+    div(phi,alpha1)  Gauss upwind;
+    div(rhoPhi,Ub)  Gauss upwind;
+    div(phi,beta)   Gauss upwind;
+	div(phirb,beta)   Gauss upwind;
+    div(phib,Ub)    Gauss upwind;
+    div(phib,beta)  Gauss upwind;
+    div(phib)       Gauss upwind;//
+	
+	// until here it is better to use upwind to make the case stable. I really want to fix it within 10 years
+		
+    div(phib,k)     Gauss limitedLinear 1;
+    div(phib,epsilon) Gauss limitedLinear 1;
+    div(phir,alpha) Gauss limitedLinear01 1;
+    div(phia,Ua)    Gauss limitedLinearV 1;
+    div(phiRa,Ua)    Gauss limitedLinearV 1;
+    div(phiRb,Ub)    Gauss limitedLinearV 1;
+    div(phiFra,Ua)    Gauss limitedLinearV 1; //////
+		
+    div(phi,alpha)  Gauss limitedLinear01 1;
+    div(phi,Theta)  Gauss limitedLinear 1;
+    
+    div(alpha,nu)   Gauss linear;
+    div(Rca)        Gauss linear;
+    div(Rcb)        Gauss linear;
+    div((beta*Rcb)) Gauss linear;
+    div((alpha*Rca)) Gauss linear;
+    div((rho*Rcb))    Gauss linear;
+    div((rho*Rca))    Gauss linear;
+    div(((beta*nuEffb)*grad(Ub).T())) Gauss linear;
+    
+    div((muEffb*dev(T(grad(Ub)))))	Gauss linear 1; //YAR     
+    div(((max(alpha,alphaSmall)*nuFra)*grad(Ua).T())) Gauss linear;
+    div((((alpha+alphaSmall)*nuEffa)*grad(Ua).T())) Gauss linear;
+}
+
+laplacianSchemes
+{
+    default         Gauss linear corrected;
+    laplacian(nuEffa,Ua) Gauss linear corrected;
+    laplacian(nuEffb,Ub) Gauss linear corrected;
+    laplacian((rho*(1|A(U))),p) Gauss linear corrected;
+    laplacian(alphaPpMag,alpha) Gauss linear corrected;
+    laplacian(Galphaf,alpha) Gauss linear corrected;
+    laplacian(DkEff,k) Gauss linear corrected;
+    laplacian(DkEff,beta) Gauss linear corrected;
+    laplacian(DepsilonEff,epsilon) Gauss linear corrected;
+    laplacian(DepsilonEff,beta) Gauss linear corrected;
+    laplacian(kappa,Theta) Gauss linear corrected;
+}
+
+interpolationSchemes
+{
+    default  linear;
+}
+
+snGradSchemes
+{
+    default         corrected;
+}
+
+fluxRequired
+{
+    default         no;
+    beta	        ;
+    p_rgh           ;
+    alpha1          ;
+    pcorr           ;
+}
+
+
+// ************************************************************************* //
