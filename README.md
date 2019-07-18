@@ -1,5 +1,7 @@
 # Dohmen-Janssen-and-Hanes-2002
-SedWaveFoam case setup for sheet flow under non-breaking waves (Dohmen-Janssen and Hanes, 2002)
+SedWaveFoam case setup for sheet flow under non-breaking waves 
+(details of physical experiment refer to Dohmen-Janssen and Hanes, 2002, JGR: Oceans, https://doi.org/10.1029/2001JC001045)
+Modeling paper is published in JGR: Oceans (Kim et al., 2018, https://doi.org/10.1029/2018JC013930)
 
 ### How to Simulate
 * (1) FoamClearPolyMesh
